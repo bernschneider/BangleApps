@@ -5,15 +5,15 @@ WIDGETS["widmoon"] = { area: "tr", width: 24, draw: function() {
   const simulate = false; // simulate one month in one minute
   const updateR = 1000; // update every x ms in simulation
 
-  function moonPhase() {
+  function frac(x) { // Peter Bernschneider, 2022-03-16
+    return x - Math.floor(x);
+  }    
+
+  function moonPhase() { // Peter Bernschneider, 2022-03-16
     const d = Date();
-    var month = d.getMonth(), year = d.getFullYear(), day = d.getDate();
-    if (simulate) day = d.getSeconds() / 2 +1;
-    if (month < 3) {year--; month += 12;}
-    mproz = ((365.25 * year + 30.6 * ++month + day - 694039.09) /  29.5305882);
-    mproz = mproz - (mproz | 0);  // strip integral digits, result is between 0 and <1
-    if (simulate) console.log(mproz + "  " + day);
-    return (mproz);
+    const nm = Date.parse('2022-03-02T18:34:16'); // some new moon date
+    const lm = 29.53059 * 24 * 60 * 60 * 1000; // lunar month in ms
+    return (frac((d - nm) / lm));
   }
 
   function loadLocation() {
