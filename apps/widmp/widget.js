@@ -26,22 +26,19 @@ WIDGETS["widmoon"] = { area: "tr", width: 24, draw: function() {
     }
   }
 
-    function updateWidget() {
+  function updateWidget() {
     g.reset().setColor(g.theme.bg);
     g.fillRect(CenterX - Radius, CenterY - Radius, CenterX + Radius, CenterY + Radius);
     g.setColor(0x41f);
 
-    ilu = SunCalc.getMoonIllumination(new Date()); 
-
-    leftFactor = ilu.phase * 4 - 1;
-    rightFactor = (1 - ilu.phase) * 4 - 1;
-    if (ilu.phase >= 0.5) leftFactor = 1; else rightFactor = 1;
+    const ilu = SunCalc.getMoonIllumination(new Date()); 
+    const F = 2 * ilu.fraction - 1;
+    if (ilu.phase < 0.5) {leftFactor = F; rightFactor = 1;}
+    else                 {leftFactor = 1; rightFactor = F;}
+    
     if (true == southernHemisphere) {
       var tmp=leftFactor; leftFactor=rightFactor; rightFactor=tmp;
     }
-
-    drawMoonPhase(CenterX,CenterY, Radius, leftFactor,rightFactor);
-  }
 
     drawMoonPhase(CenterX,CenterY, Radius, leftFactor,rightFactor);
   }
